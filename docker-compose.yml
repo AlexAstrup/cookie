@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  streamlit-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+  database:
+    build:
+      context: ./data/database
+      dockerfile: Dockerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/database/data:/data  # Map the host's ./data/ folder to /var/lib/postgresql/data
+  pgadmin:
+    build:
+      context: ./data/pgadmin
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+  python-ml-model:
+    build:
+      context: ./model
+
+volumes:
+  pg-data:
