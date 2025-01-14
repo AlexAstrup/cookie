@@ -1,23 +1,11 @@
 import streamlit as st
+import numpy as np
+import pandas as pd
 
-genre = st.radio(
-    "What's your favorite movie genre",
-    [":rainbow[Comedy]", "***Drama***", "Documentary :movie_camera:"],
-    captions=["Laugh out loud.", "Get the popcorn.", "Never stop learning."])
 
-if genre == ":rainbow[Comedy]":
-    st.write("You selected comedy.")
-else:
-    st.write("You didn't select comedy.")
+conn = st.connection("postgresql", type="sql")
 
-#
-# # Initialize connection.
-# conn = st.connection("postgresql", type="sql")
-#
-# # Perform query.
-# df = conn.query('SELECT * FROM mytable;', ttl="10m")
-#
-# # Print results.
-# for row in df.itertuples():
-#     st.write(f"{row.name} has a :{row.pet}:")
-#
+df = conn.query('SELECT * FROM test.bdt_background_train', ttl="10m")
+
+st.line_chart(df)
+

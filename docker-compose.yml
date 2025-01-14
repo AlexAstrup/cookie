@@ -14,7 +14,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data/database/data:/data  # Map the host's ./data/ folder to /var/lib/postgresql/data
+      - ./data/database/data:/data
   pgadmin:
     build:
       context: ./data/pgadmin
