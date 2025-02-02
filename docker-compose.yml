@@ -1,16 +1,53 @@
-version: '1'
-
 services:
+  fastapi:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8001"
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORt}/${POSTGRES_DB}
   streamlit-app:
     build:
       context: ./app
       dockerfile: Dockerfile
     ports:
       - "8501:8501"
+    depends_on:
+      - database
+  mlflow-tracking-server:
+    build:
+      context: ./mlflow
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlflow/mlruns:/mlflow/mlruns
+    environment:
+      BACKEND_STORE_URI: ${BACKEND_STORE_URI}
+      ARTIFACT_ROOT: ${ARTIFACT_ROOT}
+      HOST: ${HOST}
+  mlflow-model-server:
+    build:
+      context: ./model
+      dockerfile: Dockerfile
+    container_name: mlflow-model-serving
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mlflow-tracking-server
+    volumes:
+      - ./mlflow/mlruns:/mlflow/mlruns
   database:
     build:
       context: ./data/database
       dockerfile: Dockerfile
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     volumes:
@@ -21,9 +58,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:80"
-  python-ml-model:
-    build:
-      context: ./model
-
+    depends_on:
+      - database
 volumes:
   pg-data:
+  mlflow_data:
