@@ -1,0 +1,72 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgres://alexander:mypassword@db:5432/mydb
+    depends_on:
+      - database
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
+  database:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: alexander
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./backend/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/data:/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U alexander -d mydb" ]
+      interval: 10s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "1G"
+        reservations:
+          memory: "512M"
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    ports:
+#      - "5050:80"
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@example.com
+#      PGADMIN_DEFAULT_PASSWORD: admin
+#    depends_on:
+#      - database
+#    volumes:
+#      - pgadmin-data:/var/lib/pgadmin
+#      - ./pgadmin-config/servers.json:/pgadmin4/servers.json
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: "0.5"
+#          memory: "512M"
+volumes:
+  postgres-data:
+  pgadmin-data:
+
+
+
