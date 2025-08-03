@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import RequireAuth from './components/RequireAuth';
 
@@ -14,7 +14,7 @@ function App() {
   const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname);
 
   return (
-    <Router>
+    <>
       {shouldShowHeader && <Header />}
       <div className="app-content" style={{ marginTop: '70px' }}>
         <Routes>
@@ -25,7 +25,7 @@ function App() {
           <Route path="/contact" element={<RequireAuth><Contact /></RequireAuth>} />
         </Routes>
       </div>
-    </Router>
+    </>
   );
 }
 
