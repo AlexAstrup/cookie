@@ -1,17 +1,188 @@
-body {
+/* index.css */
+
+/* CSS Reset */
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Root Variables - Dracula Inspired Color Scheme */
+:root {
+  --background: #282a36;      /* Dark background */
+  --current-line: #44475a;     /* Slightly lighter for panels */
+  --foreground: #f8f8f2;       /* Off-white text */
+  --comment: #6272a4;          /* Muted purple/blue for borders & secondary text */
+  --cyan: #8be9fd;
+  --green: #50fa7b;
+  --orange: #ffb86c;
+  --pink: #ff79c6;
+  --purple: #bd93f9;
+  --red: #ff5555;
+  --yellow: #f1fa8c;
+
+  /* Custom properties for UI elements */
+  --button-bg: var(--purple);
+  --button-hover-bg: var(--pink);
+  --input-bg: var(--current-line);
+  --input-border: var(--comment);
+}
+
+/* Global Base Styles */
+html,
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  height: 100%;
+}
+
+/* Global Links */
+a {
+  color: var(--purple);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--pink);
+}
+
+/* Container for the App Content */
+.app-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  /* Ensure content appears below the fixed header */
+  margin-top: 70px;
+}
+
+/* Button Styles */
+button {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--button-bg);
+  color: var(--background);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--button-hover-bg);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Styles for Form Inputs */
+input,
+textarea,
+select {
+  background-color: var(--input-bg);
+  color: var(--foreground);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--green);
+}
+
+/* Card Component for Data Panels, etc. */
+.card {
+  background-color: var(--current-line);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+/* Header Formatting Enhancements */
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-bottom: 3px solid var(--purple);
+  padding-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--cyan);
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: var(--green);
+  margin-bottom: 0.5rem;
+}
+
+.header {
+  background-color: #333;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f4f4f4;
 }
 
-h1 {
-  color: #333;
+.nav-list li {
+  margin: 0 15px;
 }
 
+.nav-list a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+/* Paragraph Margins */
 p {
-  color: #555;
+  margin-bottom: 1rem;
+}
+
+/* Horizontal Rule Style */
+hr {
+  border: 0;
+  border-top: 1px solid var(--input-border);
+  margin: 2rem 0;
+}
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--comment);
+  border-radius: 6px;
+  border: 3px solid var(--background);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
 }

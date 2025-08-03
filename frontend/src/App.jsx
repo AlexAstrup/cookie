@@ -1,59 +1,32 @@
-import React, {useState, useEffect} from 'react';
-import {Line} from 'react-chartjs-2';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import Header from './components/Header';
+import RequireAuth from './components/RequireAuth';
 
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-} from 'chart.js';
-
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
-
+import SignInPage from './pages/SignInScreen';
+import Home from './pages/Home';
+import About from './pages/About';
+import ChartPage from './pages/ChartPage';
+import Contact from './pages/Contact';
 
 function App() {
-    const [chartData, setChartData] = useState(null);
+  const location = useLocation();
+  const hideHeaderRoutes = ['/signin'];
+  const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname);
 
-    useEffect(() => {
-        fetch("http://localhost:5000/data")
-            .then(response => response.json())
-            .then(data => {
-                // If the API response is a string, parse it into a usable array
-                const parsedData = typeof data === "string" ? JSON.parse(data) : data;
-
-                console.log("Corrected Data:", parsedData);
-
-                setChartData({
-                    labels: parsedData.map((_, i) => `Point ${i + 1}`),
-                    datasets: [
-                        {label: "Column 1", data: parsedData.map(row => row[0]), borderColor: "red", borderWidth: 2},
-                        {label: "Column 2", data: parsedData.map(row => row[1]), borderColor: "green", borderWidth: 2},
-                        {label: "Column 3", data: parsedData.map(row => row[2]), borderColor: "blue", borderWidth: 2},
-                    ],
-                });
-            })
-            .catch(error => console.error("Error fetching data:", error));
-    }, []);
-
-
-    return (
-        <div style={{textAlign: "center", padding: "20px"}}>
-            <h1>Data Visualization</h1>
-            {chartData ? <Line data={chartData}/> : <p>Loading...</p>}
-        </div>
-    );
+  return (
+    <Router>
+      {shouldShowHeader && <Header />}
+      <div className="app-content" style={{ marginTop: '70px' }}>
+        <Routes>
+          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/" element={<RequireAuth><Home /></RequireAuth>} />
+          <Route path="/about" element={<RequireAuth><About /></RequireAuth>} />
+          <Route path="/chart" element={<RequireAuth><ChartPage /></RequireAuth>} />
+          <Route path="/contact" element={<RequireAuth><Contact /></RequireAuth>} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
