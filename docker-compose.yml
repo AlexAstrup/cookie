@@ -47,26 +47,26 @@ services:
           memory: "1G"
         reservations:
           memory: "512M"
-#  pgadmin:
-#    image: dpage/pgadmin4
-#    ports:
-#      - "5050:80"
-#    environment:
-#      PGADMIN_DEFAULT_EMAIL: admin@example.com
-#      PGADMIN_DEFAULT_PASSWORD: admin
-#    depends_on:
-#      - database
-#    volumes:
-#      - pgadmin-data:/var/lib/pgadmin
-#      - ./pgadmin-config/servers.json:/pgadmin4/servers.json
-#    deploy:
-#      resources:
-#        limits:
-#          cpus: "0.5"
-#          memory: "512M"
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - database
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./pgadmin-config/servers.json:/pgadmin4/servers.json
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
 volumes:
   postgres-data:
-#  pgadmin-data:
+  pgadmin-data:
 
 
 
