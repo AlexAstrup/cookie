@@ -1,31 +1,35 @@
 CREATE SCHEMA test
     AUTHORIZATION alexander;
 
-CREATE TABLE test.BDT_background_train
+CREATE TABLE test.bdt_background_train
 (
+  id    INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   one   FLOAT,
   two   FLOAT,
   three FLOAT
 );
-CREATE TABLE test.BDT_background_test
+CREATE TABLE test.bdt_background_test
 (
+  id    INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   one   FLOAT,
   two   FLOAT,
   three FLOAT
 );
-CREATE TABLE test.BDT_signal_train
+CREATE TABLE test.bdt_signal_train
 (
+  id    INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   one   FLOAT,
   two   FLOAT,
   three FLOAT
 );
-CREATE TABLE test.BDT_signal_test
+CREATE TABLE test.bdt_signal_test
 (
+  id    INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   one   FLOAT,
   two   FLOAT,
   three FLOAT
 );
-COPY test.BDT_background_train FROM '/data/BDT_background_train.csv' DELIMITER ',' CSV HEADER;
-COPY test.BDT_background_test FROM '/data/BDT_background_test.csv' DELIMITER ',' CSV HEADER;
-COPY test.BDT_signal_train FROM '/data/BDT_signal_train.csv' DELIMITER ',' CSV HEADER;
-COPY test.BDT_signal_test FROM '/data/BDT_signal_test.csv' DELIMITER ',' CSV HEADER;
+COPY test.bdt_background_train (one, two, three) FROM '/data/BDT_background_train.csv' DELIMITER ',' CSV HEADER;
+COPY test.bdt_background_test (one, two, three) FROM '/data/BDT_background_test.csv' DELIMITER ',' CSV HEADER;
+COPY test.bdt_signal_train (one, two, three) FROM '/data/BDT_signal_train.csv' DELIMITER ',' CSV HEADER;
+COPY test.bdt_signal_test (one, two, three) FROM '/data/BDT_signal_test.csv' DELIMITER ',' CSV HEADER;
