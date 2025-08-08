@@ -91,7 +91,7 @@ function ChartPage() {const [rawData, setRawData] = useState(null);
 
   /* ───────────────────────── UI ──────────────────────────── */
   return (
-    <div>
+    <div style={{ padding: '1rem' }}>
       <h1>Data Visualization</h1>
 
       {chartData ? (
