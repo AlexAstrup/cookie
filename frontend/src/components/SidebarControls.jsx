@@ -1,28 +1,40 @@
 // src/components/SidebarControls.jsx
+import { useEffect, useState } from 'react';
 import { useModeling } from '../context/ModelingContext';
-
-const DATASETS = ['sales_q1', 'sales_q2', 'marketing', 'sensor_a'];
-const MODELS = ['xgboost', 'random_forest', 'lstm'];
 
 export default function SidebarControls() {
   const { params, setParams, simulate, status, error } = useModeling();
+  const [datasets, setDatasets] = useState([]);
+  const MODELS = ['xgboost', 'random_forest', 'lstm'];
 
   const disabled = status === 'running';
   const canSimulate = params.dataset && params.model && !disabled;
 
+  useEffect(() => {
+    const fetchDatasets = async () => {
+      try {
+        const res = await fetch('/data/tables/test');
+        const data = await res.json();
+        setDatasets(data || []);
+      } catch (err) {
+        console.error('Error fetching datasets:', err);
+      }
+    };
+    fetchDatasets();
+  }, []);
+
   return (
     <aside className="sidebar">
       <h3 className="sidebar-title">Controls</h3>
-
       <label className="field">
-        <span>Dataset</span>
+        <span>Dataset (Table)</span>
         <select
-          value={params.dataset}
+          value={params.dataset || ''}
           onChange={(e) => setParams((p) => ({ ...p, dataset: e.target.value }))}
         >
-          <option value="">Select dataset</option>
-          {DATASETS.map((d) => (
-            <option key={d} value={d}>{d}</option>
+          <option value="">Select table</option>
+          {datasets.map((t) => (
+            <option key={t} value={t}>{t}</option>
           ))}
         </select>
       </label>
