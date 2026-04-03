@@ -1,6 +1,6 @@
 // src/context/ModelingContext.jsx
 import { createContext, useContext, useMemo, useRef, useState } from 'react';
-import { runSimulation } from '../services/modelingApi';
+import { runDataFetch, runModelTrain  } from '../services/modelingApi';
 
 const ModelingContext = createContext(null);
 
@@ -13,24 +13,47 @@ export function ModelingProvider({ children }) {
     features: [],
   });
   const [status, setStatus] = useState('idle'); // 'idle' | 'running' | 'success' | 'error'
+  const [data, setData] = useState(null);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
-
   const abortRef = useRef(null);
 
-  async function simulate() {
+  // Fetch Data:
+  async function fetchData() {
     setStatus('running');
     setError(null);
     setResult(null);
 
-    // cancel any in-flight run
     if (abortRef.current) abortRef.current.abort();
     const controller = new AbortController();
     abortRef.current = controller;
 
     try {
-      const data = await runSimulation(params, { signal: controller.signal });
-      setResult(data);
+      const data = await runDataFetch(params, { signal: controller.signal });
+      setData(data);
+      setStatus('success');
+    } catch (err) {
+      if (err.name === 'AbortError') return;
+      setError(err.message || "Couldn't load data.");
+      setStatus('error');
+    } finally {
+      abortRef.current = null;
+    }
+  }
+
+  // Model Training:
+  async function simulate() {
+    setStatus('running');
+    setError(null);
+    setResult(null);
+
+    if (abortRef.current) abortRef.current.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    try {
+      const res = await runModelTrain(params, { signal: controller.signal });
+      setResult(res);
       setStatus('success');
     } catch (err) {
       if (err.name === 'AbortError') return;
@@ -42,7 +65,7 @@ export function ModelingProvider({ children }) {
   }
 
   const value = useMemo(
-    () => ({ params, setParams, simulate, status, result, error }),
+    () => ({ params, setParams, simulate, fetchData, status, result, data, error }),
     [params, status, result, error]
   );
 

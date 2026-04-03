@@ -1,16 +1,18 @@
 import {Routes, Route, useLocation} from 'react-router-dom';
 import Header from './components/Header';
 import RequireAuth from './components/RequireAuth';
+import { ModelingProvider } from './context/ModelingContext';
 
 import SignInPage from './pages/SignInScreen';
 import Home from './pages/Home';
 import About from './pages/About';
-import ChartPage from './pages/ChartPage';
-import Contact from './pages/Contact';
+import Scenarios from './pages/Scenarios';
+import Data from './pages/Data';
+import Models from './pages/Models';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 
-function App() {
+function AppContent() {
   const location = useLocation();
   const hideHeaderRoutes = ['/signin'];
   const shouldShowHeader = !hideHeaderRoutes.includes(location.pathname);
@@ -33,12 +35,12 @@ function App() {
             element={<RequireAuth><About/></RequireAuth>}
           />
           <Route
-            path="/chart"
-            element={<RequireAuth><ChartPage/></RequireAuth>}
+            path="/data"
+            element={<RequireAuth><Data/></RequireAuth>}
           />
           <Route
-            path="/contact"
-            element={<RequireAuth><Contact/></RequireAuth>}
+            path="/models"
+            element={<RequireAuth><Models/></RequireAuth>}
           />
 
           {/* Nested Dashboard Layout */}
@@ -50,11 +52,20 @@ function App() {
               </RequireAuth>
             }
           >
-            <Route index element={<Dashboard/>}/>
+            <Route index element={<Scenarios/>}/>
+            <Route path=":scenarioId" element={<Dashboard/>}/>
           </Route>
         </Routes>
       </div>
     </>
+  );
+}
+
+function App() {
+  return (
+    <ModelingProvider>
+      <AppContent />
+    </ModelingProvider>
   );
 }
 

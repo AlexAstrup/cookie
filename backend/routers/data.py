@@ -1,14 +1,18 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Any
+import pandas as pd
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import text, inspect
+from sqlalchemy import text, inspect, MetaData, Table, inspect, select
 
 from backend.dependencies import get_db
 from backend.models.bdt_signal import BdtSignalTrain
 from backend.schemas.bdt_signal import BdtSignalTrainOut
+from backend.utils.data import fetch_validated_table
+from pydantic import create_model, BaseModel
 
 router = APIRouter(prefix="/data", tags=["data"])
+
 
 @router.get(
     "/tables/{schema_name}",
@@ -23,11 +27,16 @@ def list_tables(schema_name: str, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.options("/bdt")
-async def options_data():
-    return {"message": "CORS preflight allowed"}
 
 
+@router.get("/{schema_name}/{table_name}")
+def get_table_data(schema_name: str, table_name: str, db: Session = Depends(get_db)):
+    try:
+        return fetch_validated_table(schema_name, table_name, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching data: {str(e)}")
+
+# Legacy
 @router.get(
     "/bdt",
     response_model=List[BdtSignalTrainOut],

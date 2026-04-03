@@ -1,11 +1,42 @@
 from sqlalchemy import Column, Integer, Float
 from backend.db.core import Base
 
+
 class BdtSignalTrain(Base):
-    __tablename__  = "bdt_signal_train"
+    __tablename__ = "bdt_signal_train"
     __table_args__ = {"schema": "test"}
 
-    id    = Column(Integer, primary_key=True, index=True)
-    one   = Column(Float, nullable=False)
-    two   = Column(Float, nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    one = Column(Float, nullable=False)
+    two = Column(Float, nullable=False)
+    three = Column(Float, nullable=False)
+
+
+class BdtSignalTest(Base):
+    __tablename__ = "bdt_signal_test"
+    __table_args__ = {"schema": "test"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    one = Column(Float, nullable=False)
+    two = Column(Float, nullable=False)
+    three = Column(Float, nullable=False)
+
+
+class BdtBackgroundTrain(Base):
+    __tablename__ = "bdt_background_train"
+    __table_args__ = {"schema": "test"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    one = Column(Float, nullable=False)
+    two = Column(Float, nullable=False)
+    three = Column(Float, nullable=False)
+
+
+class BdtBackgroundTest(Base):
+    __tablename__ = "bdt_background_test"
+    __table_args__ = {"schema": "test"}
+
+    id = Column(Integer, primary_key=True, index=True)
+    one = Column(Float, nullable=False)
+    two = Column(Float, nullable=False)
     three = Column(Float, nullable=False)

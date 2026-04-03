@@ -1,20 +1,22 @@
 import SidebarControls from '../components/SidebarControls';
-import {Outlet} from 'react-router-dom';
-import {ModelingProvider} from '../context/ModelingContext';
+import {Outlet, useLocation} from 'react-router-dom';
 
 export default function DashboardLayout() {
+  const location = useLocation();
+  const isScenariosPage = location.pathname === '/dashboard';
+
   return (
-    <ModelingProvider>
-      <div className="dashboard dashboard-shell">
-        <div className="dashboard-body">
+    <div className="dashboard dashboard-shell">
+      <div className="dashboard-body">
+        {!isScenariosPage && (
           <aside className="sidebar">
             <SidebarControls/>
           </aside>
-          <main className="dashboard-main">
-            <Outlet/>
-          </main>
-        </div>
+        )}
+        <main className="dashboard-main">
+          <Outlet/>
+        </main>
       </div>
-    </ModelingProvider>
+    </div>
   );
 }

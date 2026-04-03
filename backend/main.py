@@ -5,7 +5,7 @@ from backend.db.core import engine, Base
 from backend.db.init import init_db
 from backend.db.session import SessionLocal
 from backend.seed import create_default_admin
-from backend.routers import data, user
+from backend.routers import data, user, inference
 
 app = FastAPI()
 
@@ -26,3 +26,4 @@ def startup():
 
 app.include_router(user.router)
 app.include_router(data.router)
+app.include_router(inference.router)
